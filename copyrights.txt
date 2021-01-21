@@ -6,7 +6,7 @@ All rights reserved.
 Cite the following work if any part of the provided code is used in your work.
 F. Sohrab, J. Raitoharju, A. Iosifidis and M. Gabbouj, "Ellipsoidal Subspace Support Vector Data Description," in IEEE Access, vol. 8, pp. 122013-122025, 2020, doi: 10.1109/ACCESS.2020.3007123.
 
-We use libsvm-svdd-3.22 for implementation of Support Vector data description. As per Instructions, the following Copyright notice is included for the usage of LIBSVM-SVDD implementation. 
+We use libsvm-svdd-3.22 for implementation of Support Vector data description. As per Instructions of the copyright notice by LIBSVM, the following Copyright notice is included for the usage of LIBSVM-SVDD implementation. 
 
 Copyright (c) 2000-2019 Chih-Chung Chang and Chih-Jen Lin
 All rights reserved.
