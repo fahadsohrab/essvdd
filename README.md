@@ -14,6 +14,8 @@ other options (input arguments) include
  'upsilon' :Regularization term, Default=0 i.e., No regularization term
            :Other options for upsilon are 1,2,3 (Please refer to paper for more details)
  'B'       :Default=0.1, Controling the importance of regularization term
+ 'npt'     :1 for Non-linear Projection Trick (NPT)-based non-linear Subspace-SVDD (Default=0, linear)
+  's'       :Hyperparameter for the kernel inside NPT (Default=0.001). 
  ```
 
 # Example 
