@@ -14,13 +14,13 @@ function varargout=essvddtest(Testdata,testlabels,essvddmodel)
 %   output argument #6 = F-Measure
 %   output argument #7 = Geometric mean i.e, sqrt(tp_rate*tn_rate)
 %Example
-%[predicted_labels,accuracy,sensitivity,specificity]=ssvddtest(Testdata,testlabels,ssvddmodel);
+%[predicted_labels,accuracy,sensitivity,specificity]=ssvddtest(Testdata,testlabels,essvddmodel);
 nptflag=essvddmodel.npt{1};
 if nptflag==1
     disp('NPT based non-linear ES-SVDD Testing...')
     A=essvddmodel.npt{2};
     Ktrain=essvddmodel.npt{3};
-    Phi=ssvddmodel.npt{4};
+    Phi=essvddmodel.npt{4};
     M_train=essvddmodel.npt{5};
     NN = size(Testdata,2);
     N = size(Ktrain,2);
