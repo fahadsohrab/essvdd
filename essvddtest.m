@@ -4,7 +4,7 @@ function varargout=essvddtest(Testdata,testlabels,essvddmodel)
 % Input
 %   Testdata  = Contains testing data from
 %   Testlabels= contains original test lables
-%   ssvddmodel= contains the output obtained from "ssvddmodel=ssvddtrain(Traindata,varargin)"
+%   essvddmodel= contains the output obtained from "essvddmodel=essvddtrain(Traindata,varargin)"
 % Output      
 %   output argument #1 = predicted labels
 %   output argument #2 = accuracy 
@@ -15,6 +15,23 @@ function varargout=essvddtest(Testdata,testlabels,essvddmodel)
 %   output argument #7 = Geometric mean i.e, sqrt(tp_rate*tn_rate)
 %Example
 %[predicted_labels,accuracy,sensitivity,specificity]=ssvddtest(Testdata,testlabels,ssvddmodel);
+nptflag=essvddmodel.npt{1};
+if nptflag==1
+    disp('NPT based non-linear ES-SVDD Testing...')
+    A=essvddmodel.npt{2};
+    Ktrain=essvddmodel.npt{3};
+    Phi=ssvddmodel.npt{4};
+    M_train=essvddmodel.npt{5};
+    NN = size(Testdata,2);
+    N = size(Ktrain,2);
+    Dtest = ((sum(M_train'.^2,2)*ones(1,NN))+(sum(Testdata'.^2,2)*ones(1,N))'-(2*(M_train'*Testdata)));
+    Ktest = exp(-Dtest/A);
+    M = size(Ktest,2);
+    Ktest = (eye(N,N)-ones(N,N)/N) * (Ktest - (Ktrain*ones(N,1)/N)*ones(1,M));
+    Testdata = pinv(Phi')*Ktest;
+else
+    disp('Linear ES-SVDD Testing...')
+end
 
 Q=essvddmodel.Q;
 Model=essvddmodel.modelparam{end};
