@@ -25,7 +25,9 @@ defaultVal_d = 1;
 defaultVal_eta = 0.001;
 defaultVal_psi=0;
 defaultVal_b=0.01;
+defaultVal_npt=0;
 defaultVal_upsilon=0;
+defaultVal_s=0.001;
 
 addParameter(p,'maxIter',defaultVal_maxIter)
 addParameter(p,'C',defaultVal_Cval)
@@ -34,6 +36,8 @@ addParameter(p,'eta',defaultVal_eta)
 addParameter(p,'psi',defaultVal_psi)
 addParameter(p,'B',defaultVal_b)
 addParameter(p,'upsilon',defaultVal_upsilon)
+addParameter(p,'npt',defaultVal_npt)
+addParameter(p,'s',defaultVal_s)
 
 valid_argnames = {'psi','upsilon'};
 argwasspecified = ismember(valid_argnames, lower(varargin(1:2:end)));
@@ -50,6 +54,8 @@ d=p.Results.d;
 eta=p.Results.eta;
 consTypepsi=p.Results.psi;
 Bta=p.Results.B;
+npt=p.Results.npt;
+sigma =p.Results.s;
 consTypepsiupsilon=p.Results.upsilon;
 
 if(consTypepsi>3)||(consTypepsi<0)
@@ -70,6 +76,36 @@ end
 
 Trainlabel= ones(size(Traindata,2),1); %Training labels (all +1s)
 
+if(npt~=1)&&(npt~=0)
+    msg = 'Error in essvddtrain() input: npt value should be either 1 for non-linear data description, or 0 (defaullt if no argument is passed) for linear data description.';
+    error(msg)
+end
+
+if npt==1
+    disp('NPT bases non-linear ES-SVDD running...')
+    %RBF kernel
+    N = size(Traindata,2);
+    Dtrain = ((sum(Traindata'.^2,2)*ones(1,N))+(sum(Traindata'.^2,2)*ones(1,N))'-(2*(Traindata'*Traindata)));
+    sigma = sigma  * mean(mean(Dtrain));  A = 2.0 * sigma;
+    Ktrain = exp(-Dtrain/A);
+    %center_kernel_matrices
+    N = size(Ktrain,2);
+    Ktrain = (eye(N,N)-ones(N,N)/N) * Ktrain * (eye(N,N)-ones(N,N)/N);
+    [U,S] = eig(Ktrain);        s = diag(S);
+    s(s<10^-6) = 0.0;
+    [U, s] = sortEigVecs(U,s);  s_acc = cumsum(s)/sum(s);   S = diag(s);
+    II = find(s_acc>=0.999);
+    LL = II(1);
+    Pmat = pinv(( S(1:LL,1:LL)^(0.5) * U(:,1:LL)' )');
+    %Phi
+    Phi = Pmat*Ktrain;
+    %Saving useful variables for non-linear testing
+    npt_data={1,A,Ktrain,Phi,Traindata};%1,A,Ktrain,Phi,Traindata (1 is for flag)
+    Traindata=Phi;
+else
+    disp('Linear ES-SVDD running...')
+end
+
 Q = initialize_Q(size(Traindata,1),d);
 E= Q * Traindata;
 EE = sqrtm(pinv(cov(E')));
@@ -86,7 +122,7 @@ for ii=1:maxIter
     end
     const= generalconstraintESSVDD(consType,Cval,Q,Traindata,Alphavector);
     %Compute the gradient and update the matrix Q
-    CovX=cov(Traindata'); 
+    CovX=cov(Traindata');
     V=pinv(Q*CovX*Q');
     Sum1_data =2*V*Q*Traindata*diag(Alphavector)*Traindata';
     Sum2_data= 2*V*Q*(Traindata*(Alphavector*Alphavector')*Traindata');
@@ -100,12 +136,17 @@ for ii=1:maxIter
     E= Q * Traindata;
     EE = sqrtm(pinv(cov(E')));
     reducedData=EE*Q*Traindata;
-    
     Model = svmtrain(Trainlabel, reducedData', ['-s ',num2str(5),' -t 0 -c ',num2str(Cval)]);
-    
     Qiter{ii}=EE*Q;
     Modeliter{ii}=Model;
 end
 essvdd.modelparam= Modeliter;
 essvdd.Q= Qiter;
+
+if npt==1
+    essvdd.npt=npt_data;
+else
+    essvdd.npt{1}=0;
+end
+
 end
