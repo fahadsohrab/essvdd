@@ -31,7 +31,7 @@ essvddmodel=essvddtrain(Traindata,'C',0.12,'d',2,'eta',0.02,'upsilon',2);
 
 Please contact fahad.sohrab@tuni.fi for any issues.
 # Citation
-Please consider citing the following paper.
+If you use any part of this repository in your implementation, consider citing the following paper.
 
 @ARTICLE{essvdd2020sohrab,
   author={F. {Sohrab} and J. {Raitoharju} and A. {Iosifidis} and M. {Gabbouj}},
