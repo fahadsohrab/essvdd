@@ -12,6 +12,8 @@ function [essvdd]=essvddtrain(Traindata,varargin)
 %   'upsilon' :regularization term, Default=0 i.e., No regularization term
 %             :Other options for psi are 1,2,3 (Please refer to paper for more details)
 %   'B'       :Controling the importance of regularization term, Default=0.1
+%   'npt'     :1 for Non-linear Projection Trick (NPT)-based non-linear E-SVDD (Default=0, linear)
+%   's'       :Hyperparameter for the kernel inside NPT. 
 %
 % Output      :ssvdd.modelparam = Trained model (for every iteration)
 %             :ssvdd.Q= Projection matrix (after every iteration)
