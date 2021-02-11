@@ -29,6 +29,8 @@ Testdata= rand(D,noOfTestData); %Generate testing data
 %   'upsilon' :regularization term, Default=0 i.e., No regularization term
 %             :Other options for upsilon are 1,2,3 (Please refer to paper for more details)
 %   'B'       :Controling the importance of regularization term, Default=0.1
+%   'npt'     :1 for Non-linear Projection Trick (NPT)-based non-linear Subspace-SVDD (Default=0, linear)
+%   's'       :Hyperparameter for the kernel inside NPT. 
 
 
 essvddmodel=essvddtrain(Traindata,'C',0.1,'d',4,'eta',0.02,'B',0.001,'psi',2);
