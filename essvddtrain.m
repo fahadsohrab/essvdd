@@ -109,8 +109,8 @@ else
 end
 
 Q = initialize_Q(size(Traindata,1),d);
-E= Q * Traindata;
-EE = sqrtm(pinv(cov(E')));
+E= (Q * Traindata)*(Traindata'*Q');
+EE = sqrtm(pinv(E));
 reducedData=EE*Q*Traindata;
 Model = svmtrain(Trainlabel, reducedData', ['-s ',num2str(5),' -t 0 -c ',num2str(Cval)]);
 for ii=1:maxIter
@@ -124,19 +124,20 @@ for ii=1:maxIter
     end
     const= generalconstraintESSVDD(consType,Cval,Q,Traindata,Alphavector);
     %Compute the gradient and update the matrix Q
-    CovX=cov(Traindata');
-    V=pinv(Q*CovX*Q');
+    St=Traindata*Traindata';
+    V=pinv(Q*St*Q');
     Sum1_data =2*V*Q*Traindata*diag(Alphavector)*Traindata';
     Sum2_data= 2*V*Q*(Traindata*(Alphavector*Alphavector')*Traindata');
-    Sum3_data=Sum1_data*Q'*V*Q*CovX;
-    Sum4_data=Sum2_data*Q'*V*Q*CovX;
+    Sum3_data=Sum1_data*Q'*V*Q*St;
+    Sum4_data=Sum2_data*Q'*V*Q*St;
     Grad=Sum1_data-Sum2_data-Sum3_data+Sum4_data+(Bta*const);
     Q = Q - eta*Grad;
     
     %orthogonalize and normalize Q1
     Q = OandN_Q(Q);
-    E= Q * Traindata;
-    EE = sqrtm(pinv(cov(E')));
+    E= (Q * Traindata)*(Traindata'*Q');
+    EE = sqrtm(pinv(E));
+
     reducedData=EE*Q*Traindata;
     Model = svmtrain(Trainlabel, reducedData', ['-s ',num2str(5),' -t 0 -c ',num2str(Cval)]);
     Qiter{ii}=EE*Q;
