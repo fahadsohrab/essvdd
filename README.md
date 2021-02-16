@@ -32,7 +32,7 @@ essvddmodel=essvddtrain(Traindata,'C',0.12,'d',2,'eta',0.02,'upsilon',2);
 
 
 # Citation
-If you use any part of this repository in your implementation, consider citing the following paper.
+If you use any part of this repository in your implementation, consider citing the following papers.
 ```text
 @ARTICLE{essvdd2020sohrab,
   author={F. {Sohrab} and J. {Raitoharju} and A. {Iosifidis} and M. {Gabbouj}},
@@ -42,6 +42,15 @@ If you use any part of this repository in your implementation, consider citing t
   volume={8},
   pages={122013-122025},
   doi={10.1109/ACCESS.2020.3007123}}
+  
+  @inproceedings{sohrab2018subspace,
+  title={Subspace support vector data description},
+  author={Sohrab, Fahad and Raitoharju, Jenni and Gabbouj, Moncef and Iosifidis, Alexandros},
+  booktitle={2018 24th International Conference on Pattern Recognition (ICPR)},
+  pages={722--727},
+  year={2018},
+  organization={IEEE}
+}
 ```
 # Contact
 Please contact fahad.sohrab@tuni.fi for any issues.
