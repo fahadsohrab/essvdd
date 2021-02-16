@@ -30,7 +30,7 @@ essvddmodel=essvddtrain(Traindata,'C',0.12,'d',2,'eta',0.02,'upsilon',2);
 [predicted_labels,accuracy,sensitivity,specificity]=essvddtest(Testdata,testlabels,essvddmodel); 
 ```
 
-Please contact fahad.sohrab@tuni.fi for any issues.
+
 # Citation
 If you use any part of this repository in your implementation, consider citing the following paper.
 ```text
@@ -43,3 +43,5 @@ If you use any part of this repository in your implementation, consider citing t
   pages={122013-122025},
   doi={10.1109/ACCESS.2020.3007123}}
 ```
+# Contact
+Please contact fahad.sohrab@tuni.fi for any issues.
