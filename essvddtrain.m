@@ -91,7 +91,7 @@ if npt==1
     sigma = sigma  * mean(mean(Dtrain));  A = 2.0 * sigma;
     Ktrain_exp = exp(-Dtrain/A);
     %center_kernel_matrices
-    N = size(Ktrain,2);
+    N = size(Ktrain_exp,2);
     Ktrain = (eye(N,N)-ones(N,N)/N) * Ktrain_exp * (eye(N,N)-ones(N,N)/N);
     [U,S] = eig(Ktrain);        s = diag(S);
     s(s<10^-6) = 0.0;
